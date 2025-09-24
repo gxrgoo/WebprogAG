@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <title>Termék hozzáadás</title>
+</head>
+<body class="bg-light d-flex flex-column align-items-center py-5">
+    
+
+
+  <div class="card shadow-lg p-4 rounded-4 mb-4" style="max-width: 450px; width: 100%;">
+    <h3 class="text-center mb-4">Termék hozzáadás</h3>
+
+    <h2 class="text-center">Végösszeg: <span id="osszertek">0 Ft</span></h2>
+    
+    <form id="termekurlap">
+      <div class="mb-3">
+        <label for="termeknev" class="form-label">Termék neve</label>
+        <input type="text" class="form-control" id="termeknev" placeholder="Írd be a termék nevét" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="darabszam" class="form-label">Darabszám</label>
+        <input type="number" class="form-control" id="darabszam" placeholder="pl. 10" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="dbar" class="form-label">Darabár (Ft)</label>
+        <input type="number" class="form-control" id="dbar" placeholder="pl. 250" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="hanykilo" class="form-label">Hány kiló van belőle?</label>
+        <input type="number" class="form-control" id="hanykilo" placeholder="pl. 2.5" step="0.1" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="kategnev" class="form-label">Kategória</label>
+        <input type="text" class="form-control" id="kategnev" placeholder="zöldség / gyümölcs" required>
+      </div>
+
+      <button type="submit" class="btn btn-primary w-100">Hozzáadás</button>
+    </form>
+  </div>
+
+  <div class="container">
+    <div id="termekcontainer" class="row g-3"></div>
+  </div>
+
+  <script>
+    let osszertek = 0;
+
+
+    document.getElementById("termekurlap").addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      let termeknev = document.getElementById("termeknev").value;
+      let darabszam = parseInt(document.getElementById("darabszam").value);
+      let dbar = parseInt(document.getElementById("dbar").value);
+      let hanykilo = parseFloat(document.getElementById("hanykilo").value);
+      let kategnev = document.getElementById("kategnev").value;
+
+      let vegosszeg = darabszam * dbar;
+
+      let card = document.createElement("div");
+      card.className = "col-12 col-md-6 col-lg-4";
+
+      let kartya = document.createElement("div");
+      kartya.className = "card shadow-sm p-3 rounded-3 h-100";
+      kartya.innerHTML = `
+        <h5 class="text-success">Sikeres hozzáadás!</h5>
+        <ul class="list-group mb-3">
+          <li class="list-group-item"><strong>Termék neve:</strong> ${termeknev}</li>
+          <li class="list-group-item"><strong>Darabszám:</strong> ${darabszam}</li>
+          <li class="list-group-item"><strong>Darabár:</strong> ${dbar} Ft</li>
+          <li class="list-group-item"><strong>Kiló:</strong> ${hanykilo}</li>
+          <li class="list-group-item"><strong>Kategória:</strong> ${kategnev}</li>
+          <li class="list-group-item"><strong>Végösszeg:</strong> ${vegosszeg} Ft</li>
+        </ul>
+        <button class="btn btn-danger btn-sm w-100 torles">Törlés</button>
+      `;
+
+      card.appendChild(kartya);
+      document.getElementById("termekcontainer").appendChild(card);
+
+      kartya.querySelector(".torles").addEventListener("click", () => {
+        card.remove();
+        osszertek -= vegosszeg;
+        document.getElementById("osszertek").innerText = `${osszertek} Ft`;
+
+      });
+      osszertek += vegosszeg;
+      document.getElementById("osszertek").innerText = `${osszertek} Ft`;
+
+
+      e.target.reset();
+    });
+  </script>
+
+</body>
+</html>
